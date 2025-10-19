@@ -1,9 +1,5 @@
 // src/components/FruitCard.jsx
 
-import React from 'react';
-import { Card } from 'react-bootstrap';
-import './FruitCard.css'; // No olvides crear este archivo
-
 const FruitCard = ({ fruit }) => {
   return (
     <Card className="h-100 shadow-sm">
