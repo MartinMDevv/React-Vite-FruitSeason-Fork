@@ -13,9 +13,9 @@ body {
 }
 
 .Eslogan {
-  background: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url('/img/img.png') no-repeat center center;
-  background-size: cover;
-  min-height: 70vh;
+    background: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url('public/img/img.png') no-repeat center center;
+    background-size: cover;
+    min-height: 70vh;
 }
 
 

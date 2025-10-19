@@ -4,6 +4,23 @@ import React from 'react';
 import { Container } from 'react-bootstrap';
 import FruitList from '../components/FruitList';
 
+
+const ProductosPage = () => {
+  return (
+    <Container className="my-5">
+      <section className="text-center">
+        <h1 className="display-4 fw-bold text-success mb-5">Nuestros Productos de Temporada</h1>
+      </section>
+      <hr className="my-5" />
+      <section>
+        {seasonsData.map((season) => (
+          <FruitList key={season.title} season={season} />
+        ))}
+      </section>
+    </Container>
+  );
+};
+
 const seasonsData = [
   {
     title: 'Primavera (septiembre – noviembre)',
@@ -51,20 +68,6 @@ const seasonsData = [
   }
 ];
 
-const ProductosPage = () => {
-  return (
-    <Container className="my-5">
-      <section className="text-center">
-        <h1 className="display-4 fw-bold text-success mb-5">Nuestros Productos de Temporada</h1>
-      </section>
-      <hr className="my-5" />
-      <section>
-        {seasonsData.map((season) => (
-          <FruitList key={season.title} season={season} />
-        ))}
-      </section>
-    </Container>
-  );
-};
+
 
 export default ProductosPage;
