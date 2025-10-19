@@ -1,0 +1,115 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;700&display=swap');
+
+
+
+.navbar {
+    background: linear-gradient(90deg, #2e8b57, #3cb371);
+}
+
+body {
+  font-family: 'Poppins', sans-serif;
+  margin: 0;
+  padding-top: 56px;
+}
+
+.Eslogan {
+  background: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url('/img/img.png') no-repeat center center;
+  background-size: cover;
+  min-height: 70vh;
+}
+
+
+.card-price {
+  color: #198754;
+  font-weight: bold;
+  font-size: 1.5rem;
+}
+
+footer {
+  background: linear-gradient(90deg, #2e8b57, #3cb371);
+}
+
+.card-img-top {
+  height: 180px;
+  /* Hace que la imagen cubra el espacio sin deformarse*/
+  object-fit: cover;
+}
+
+.productos-grid .card-img-top {
+  height: 120px;
+  object-fit: cover;
+}
+
+/* === ESTILOS PARA EL CARRUSEL === */
+.imgCarousel {
+  display: block;
+  width: 100%;
+  height: 450px;
+  object-fit: cover;
+  /* Oscurece la imagen para ver mejor el texto */
+  filter: brightness(0.7);
+}
+
+/* Estilos para el texto del carrusel*/
+.carousel-caption h5,
+.carousel-caption p {
+  /* Sombra en el texto  */
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
+
+}
+
+
+
+/* Ajuste para pantallas más pequeñas (móviles) */
+@media (max-width: 768px) {
+  .imgCarousel {
+    height: 250px;
+    /* Una altura menor en dispositivos móviles */
+  }
+}
+#root {
+  width: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+.logo {
+  height: 6em;
+  padding: 1.5em;
+  will-change: filter;
+  transition: filter 300ms;
+}
+.logo:hover {
+  filter: drop-shadow(0 0 2em #646cffaa);
+}
+.logo.react:hover {
+  filter: drop-shadow(0 0 2em #61dafbaa);
+}
+
+@keyframes logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  a:nth-of-type(2) .logo {
+    animation: logo-spin infinite 20s linear;
+  }
+}
+
+.card {
+  padding: 2em;
+}
+
+.read-the-docs {
+  color: #888;
+}
+/* src/components/FruitCard.css */
+.fruit-card-img {
+  height: 120px;
+  object-fit: cover;
+}
