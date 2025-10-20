@@ -1,19 +1,24 @@
 import { Card } from 'react-bootstrap';
 import './FruitCard.css';
 
-const FruitCard = ({ fruit }) => {
+const FruitCard = ({ fruit = {} }) => {
+  const { name = '', image = '', description = '' } = fruit;
+
   return (
     <Card className="h-100 shadow-sm">
-      <Card.Img 
-        variant="top" 
-        src={fruit.image} 
-        alt={fruit.name} 
-        className="fruit-card-img"
-      />
+      {image && (
+        <Card.Img
+          variant="top"
+          src={image}
+          alt={name}
+          className="fruit-card-img"
+        />
+      )}
       <Card.Body className="p-2 text-center">
         <Card.Text className="mb-0 fw-medium">
-          {fruit.name}
+          {name}
         </Card.Text>
+        {description && <Card.Text className="mt-1">{description}</Card.Text>}
       </Card.Body>
     </Card>
   );
