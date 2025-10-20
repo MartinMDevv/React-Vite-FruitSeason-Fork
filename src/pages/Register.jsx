@@ -17,12 +17,27 @@ export default function Register() {
       className="d-flex justify-content-center align-items-center min-vh-100"
       style={{
         paddingTop: '4rem',
-        backgroundImage: "url('/img/img.png')",
-        backgroundSize: 'cover',
-        backgroundPosition: 'center',
-        backgroundRepeat: 'no-repeat'
+        minHeight: '100vh',
+        width: '100vw',
+        position: 'relative',
+        overflow: 'hidden',
       }}
     >
+      {/* Fondo absoluto para cubrir todo */}
+      <div
+        style={{
+          backgroundImage: "url('img/img.png')",
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+          backgroundRepeat: 'no-repeat',
+          position: 'fixed',
+          top: 0,
+          left: 0,
+          width: '100vw',
+          height: '100vh',
+          zIndex: -1,
+        }}
+      />
       <div className="col-md-6 col-lg-5 col-xl-4">
         <div className="card shadow-lg border-0" style={{ background: 'rgba(255,255,255,0.93)' }}>
           <div className="card-body p-4 p-md-5">
