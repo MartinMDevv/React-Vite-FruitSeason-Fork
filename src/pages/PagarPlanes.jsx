@@ -1,5 +1,3 @@
-// src/pages/PagarPlanes.jsx
-
 import React, { useState, useEffect } from 'react';
 import { useSearchParams, Link } from 'react-router-dom';
 import { Container, Row, Col, Card, Form, Button, Alert, ListGroup, Spinner } from 'react-bootstrap';
@@ -27,8 +25,26 @@ const PagarPlanesPage = () => {
     setIsLoading(false);
   }, [searchParams]);
 
+  // ✅ NUEVO: Manejador para el nombre en la tarjeta (solo letras y espacios)
+  const handleCardNameChange = (e) => {
+    const value = e.target.value;
+    if (/^[a-zA-Z\s]*$/.test(value)) {
+      setCardName(value);
+    }
+  };
+
+  // ✅ NUEVO: Manejador para el número de tarjeta (solo números)
+  const handleCardNumberChange = (e) => {
+    const value = e.target.value;
+    // La expresión regular /^\d*$/ asegura que solo se ingresen dígitos.
+    if (/^\d*$/.test(value)) {
+      setCardNumber(value);
+    }
+  };
+
   const handlePayment = (e) => {
     e.preventDefault();
+    // Se mantiene la lógica simple para el ejemplo, pero ahora los campos ya están validados.
     if (cardName.trim() && cardNumber.trim()) {
       setPaymentSuccess(true);
     }
@@ -79,11 +95,13 @@ const PagarPlanesPage = () => {
               <Form onSubmit={handlePayment}>
                 <Form.Group className="mb-3">
                   <Form.Label>Nombre en la tarjeta</Form.Label>
-                  <Form.Control type="text" placeholder="Jose Miguel" value={cardName} onChange={e => setCardName(e.target.value)} required />
+                  {/* Se usa el nuevo manejador handleCardNameChange */}
+                  <Form.Control type="text" placeholder="Jose Miguel" value={cardName} onChange={handleCardNameChange} required />
                 </Form.Group>
                 <Form.Group className="mb-3">
                   <Form.Label>Número de la tarjeta</Form.Label>
-                  <Form.Control type="text" placeholder="1234 1234 1234 1234" value={cardNumber} onChange={e => setCardNumber(e.target.value)} required />
+                  {/* Se usa el nuevo manejador handleCardNumberChange */}
+                  <Form.Control type="text" placeholder="1234 1234 1234 1234" value={cardNumber} onChange={handleCardNumberChange} required />
                 </Form.Group>
                 <Button type="submit" className="w-100" variant="primary">Pagar ahora</Button>
               </Form>
