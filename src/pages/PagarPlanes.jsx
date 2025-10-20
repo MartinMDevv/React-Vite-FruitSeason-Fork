@@ -93,14 +93,14 @@ const PagarPlanesPage = () => {
               <h5 className="card-title mt-4">Ingresa tus datos de pago</h5>
               <Form onSubmit={handlePayment}>
                 <Form.Group className="mb-3">
-                  <Form.Label>Nombre en la tarjeta</Form.Label>
+                  <Form.Label htmlFor="cardName">Nombre en la tarjeta</Form.Label>
                   {/* Se usa el nuevo manejador handleCardNameChange */}
-                  <Form.Control type="text" placeholder="Jose Miguel" value={cardName} onChange={handleCardNameChange} required />
+                  <Form.Control id="cardName" name="cardName" type="text" placeholder="Jose Miguel" value={cardName} onChange={handleCardNameChange} required />
                 </Form.Group>
                 <Form.Group className="mb-3">
-                  <Form.Label>Número de la tarjeta</Form.Label>
+                  <Form.Label htmlFor="cardNumber">Número de la tarjeta</Form.Label>
                   {/* Se usa el nuevo manejador handleCardNumberChange */}
-                  <Form.Control type="text" placeholder="1234 1234 1234 1234" value={cardNumber} onChange={handleCardNumberChange} required />
+                  <Form.Control id="cardNumber" name="cardNumber" type="text" placeholder="1234 1234 1234 1234" value={cardNumber} onChange={handleCardNumberChange} required />
                 </Form.Group>
                 <Button type="submit" className="w-100" variant="primary">Pagar ahora</Button>
               </Form>
