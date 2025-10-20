@@ -1,5 +1,5 @@
-/* src/components/FruitCard.css */
+
 .fruit-card-img {
   height: 120px;
-  object-fit: cover; /* Asegura que la imagen llene el espacio sin deformarse */
+  object-fit: cover; 
 }

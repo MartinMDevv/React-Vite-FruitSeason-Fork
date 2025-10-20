@@ -1,6 +1,3 @@
-// src/pages/Productos.jsx
-
-import React from 'react';
 import { Container } from 'react-bootstrap';
 import FruitList from '../components/FruitList';
 

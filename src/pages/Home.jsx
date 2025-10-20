@@ -1,5 +1,3 @@
-import React from 'react'
-import { NavLink } from 'react-router-dom'
 import Carousel from '../components/Carousel'
 import Subscriptions from '../components/Subscriptions'
 import Proposal from '../components/Proposal'

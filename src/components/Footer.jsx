@@ -7,7 +7,7 @@ export default function Footer() {
 
 	const handleSubmit = (e) => {
 		e.preventDefault()
-		// Aquí podrías enviar a un servidor; por ahora solo mostramos mensaje de éxito
+		
 		setSent(true)
 		setEmail('')
 		setComentario('')

@@ -1,6 +1,3 @@
-// src/components/FruitList.jsx
-
-import React from 'react';
 import { Row, Col } from 'react-bootstrap';
 import FruitCard from './FruitCard';
 
