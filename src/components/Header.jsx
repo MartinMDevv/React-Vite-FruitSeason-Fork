@@ -39,7 +39,22 @@ export default function Header() {
               <a className="nav-link active" href="#eslogan" onClick={handleNavAnchor('eslogan')}>Inicio</a>
             </li>
             <li className="nav-item">
-              <NavLink className="nav-link" to="/productos">Productos</NavLink>
+              {/* Navega a /productos y luego hace scroll al encabezado #productos */}
+              <a
+                href="/productos"
+                className="nav-link"
+                onClick={(e) => {
+                  e.preventDefault();
+                  navigate('/productos', { replace: false });
+                  // Espera a que la ruta cargue y luego hace scroll al id
+                  setTimeout(() => {
+                    const el = document.getElementById('productos');
+                    if (el) el.scrollIntoView({ behavior: 'smooth' });
+                  }, 150);
+                }}
+              >
+                Productos
+              </a>
             </li>
             <li className="nav-item">
               <a className="nav-link" href="#quienes-somos" onClick={handleNavAnchor('quienes-somos')}>Quiénes Somos</a>

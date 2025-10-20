@@ -108,8 +108,3 @@ footer {
 .read-the-docs {
   color: #888;
 }
-/* src/components/FruitCard.css */
-.fruit-card-img {
-  height: 120px;
-  object-fit: cover;
-}
