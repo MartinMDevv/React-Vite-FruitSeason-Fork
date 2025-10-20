@@ -1,5 +1,3 @@
-// src/components/Subscriptions.jsx
-import React from 'react';
 import { Row, Col } from 'react-bootstrap';
 import SubscriptionCard from './SubscriptionCard';
 

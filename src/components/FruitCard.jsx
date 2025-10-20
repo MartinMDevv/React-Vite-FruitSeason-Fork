@@ -1,5 +1,3 @@
-// src/components/FruitCard.jsx
-import React from 'react';
 import { Card } from 'react-bootstrap';
 import './FruitCard.css';
 

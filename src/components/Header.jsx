@@ -1,5 +1,4 @@
 import { NavLink, useNavigate, useLocation } from 'react-router-dom'
-import React from 'react'
 
 export default function Header() {
   const navigate = useNavigate();

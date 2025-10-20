@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useSearchParams, Link } from 'react-router-dom';
-import { Container, Row, Col, Card, Form, Button, Alert, ListGroup, Spinner } from 'react-bootstrap';
+import { Container, Row, Col, Card, Form, Button, ListGroup, Spinner } from 'react-bootstrap';
+import Alert from '../components/Alert';
 
 const planes = {
     basico: { nombre: "Plan Básico", precio: "$12.990/mes", items: ["Caja pequeña (1-2 personas)", "3-4 variedades de frutas", "4 kg aprox."] },
@@ -25,7 +26,7 @@ const PagarPlanesPage = () => {
     setIsLoading(false);
   }, [searchParams]);
 
-  // ✅ NUEVO: Manejador para el nombre en la tarjeta (solo letras y espacios)
+  // Manejador para el nombre en la tarjeta (solo letras y espacios)
   const handleCardNameChange = (e) => {
     const value = e.target.value;
     if (/^[a-zA-Z\s]*$/.test(value)) {
@@ -33,7 +34,7 @@ const PagarPlanesPage = () => {
     }
   };
 
-  // ✅ NUEVO: Manejador para el número de tarjeta (solo números)
+  // Manejador para el número de tarjeta (solo números)
   const handleCardNumberChange = (e) => {
     const value = e.target.value;
     // La expresión regular /^\d*$/ asegura que solo se ingresen dígitos.
@@ -44,7 +45,6 @@ const PagarPlanesPage = () => {
 
   const handlePayment = (e) => {
     e.preventDefault();
-    // Se mantiene la lógica simple para el ejemplo, pero ahora los campos ya están validados.
     if (cardName.trim() && cardNumber.trim()) {
       setPaymentSuccess(true);
     }
@@ -54,23 +54,22 @@ const PagarPlanesPage = () => {
     return <Container className="text-center my-5"><Spinner animation="border" variant="success" /></Container>;
   }
 
-  if (!selectedPlan && !isLoading) {
-    return <Container className="my-5"><Alert variant="danger">No se ha seleccionado un plan válido. Por favor, <Link to="/">vuelve al inicio</Link> para seleccionar uno.</Alert></Container>;
-  }
   
   if (paymentSuccess) {
     return (
-        <Container className="my-5 pt-5">
-            <Row className="justify-content-center">
-                <Col lg={8}>
-                    <Alert variant="success">
-                        <Alert.Heading as="h4">¡Todo fue correcto!</Alert.Heading>
-                        <p>Muchas gracias por tu compra. Tu pedido del <strong>{selectedPlan.nombre}</strong> ya está siendo procesado.</p>
-                        <hr />
-                        <Link to="/" className="btn btn-outline-success mb-0">Volver al Inicio</Link>
-                    </Alert>
-                </Col>
-            </Row>
+      <Container className="my-5 pt-5">
+        <Row className="justify-content-center">
+          <Col lg={8}>
+            <Alert type="success" message={(
+              <div>
+                <h4>¡Todo fue correcto!</h4>
+                <p>Muchas gracias por tu compra. Tu pedido del <strong>{selectedPlan.nombre}</strong> ya está siendo procesado.</p>
+                <hr />
+                <Link to="/" className="btn btn-outline-success mb-0">Volver al Inicio</Link>
+              </div>
+            )} />
+          </Col>
+        </Row>
       </Container>
     );
   }
