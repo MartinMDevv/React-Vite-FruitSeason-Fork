@@ -6,9 +6,10 @@ import Login from './pages/Login.jsx';
 import Register from './pages/Register.jsx';
 import Productos from './pages/Productos.jsx';
 import PagarPlanes from './pages/PagarPlanes.jsx';
+import SubscriptionsPage from './pages/SubscriptionsPage.jsx';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import './App.css';
-
-
 
 function App() {
   return (
@@ -20,8 +21,10 @@ function App() {
         <Route path="/register" element={<Register />} />
         <Route path="/productos" element={<Productos />} />
         <Route path="/PagarPlanes" element={<PagarPlanes />} />
+        <Route path="/suscripciones" element={<SubscriptionsPage />} />
       </Routes>
       <Footer />
+      <ToastContainer position="top-right" autoClose={3000} />
     </>
   );
 }
