@@ -8,14 +8,14 @@ import { toast } from 'react-toastify';
 import api from '../services/api';
 
 const planes = {
-  basico: { nombre: 'Plan Básico', precio: '$12.990/mes', items: ['Caja pequeña (1-2 personas)', '3-4 variedades de frutas', '4 kg aprox.'] },
+  basic: { nombre: 'Plan Básico', precio: '$12.990/mes', items: ['Caja pequeña (1-2 personas)', '3-4 variedades de frutas', '4 kg aprox.'] },
   familiar: { nombre: 'Plan Familiar', precio: '$19.990/mes', items: ['Caja mediana (3-4 personas)', '6-7 variedades de frutas', '8 kg aprox.'] },
   premium: { nombre: 'Plan Premium', precio: '$28.990/mes', items: ['Caja grande (+4 personas)', '10-12 variedades premium', '12 kg aprox.'] }
 };
 
 const PagarPlanesPage = () => {
   const [searchParams] = useSearchParams();
-  const { cart } = useCart();
+  const { cart, clearCart } = useCart();
   const { isAuthenticated } = useAuth();
   const navigate = useNavigate();
   const [selectedPlan, setSelectedPlan] = useState(null);
@@ -41,8 +41,10 @@ const PagarPlanesPage = () => {
     }
 
     // Validate plan matches URL
-    const cartPlanId = cart.selectedPlan.toLowerCase().replace('_', '');
-    if (cartPlanId !== planId) {
+    const cartPlanId = cart.selectedPlan.toLowerCase();
+    const urlPlanId = planId.toLowerCase();
+
+    if (cartPlanId !== urlPlanId) {
       toast.error('El plan del carrito no coincide.');
       navigate('/suscripciones');
       return;
@@ -62,7 +64,7 @@ const PagarPlanesPage = () => {
     }
 
     // Set plan details
-    let planDetails = planes[planId];
+    let planDetails = planes[urlPlanId];
     if (planDetails) {
       planDetails = {
         ...planDetails,
@@ -80,15 +82,15 @@ const PagarPlanesPage = () => {
   // Manejador para el nombre en la tarjeta (solo letras y espacios)
   const handleCardNameChange = (e) => {
     const value = e.target.value;
-    if (/^[a-zA-Z\s]*$/.test(value)) {
+    if (/^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]*$/.test(value)) {
       setCardName(value);
     }
   };
 
-  // Manejador para el número de tarjeta (solo números)
+  // Manejador para el número de tarjeta (solo números, max 19 dígitos)
   const handleCardNumberChange = (e) => {
     const value = e.target.value;
-    if (/^\d*$/.test(value)) {
+    if (/^\d*$/.test(value) && value.length <= 19) {
       setCardNumber(value);
     }
   };
@@ -98,6 +100,11 @@ const PagarPlanesPage = () => {
 
     if (!cardName.trim() || !cardNumber.trim()) {
       toast.error('Por favor completa todos los campos');
+      return;
+    }
+
+    if (cardNumber.length < 13) {
+      toast.error('El número de tarjeta debe tener al menos 13 dígitos');
       return;
     }
 
@@ -111,7 +118,9 @@ const PagarPlanesPage = () => {
 
       const response = await api.orders.checkout(paymentData);
 
-      // Success
+      // Success - Limpiar carrito después de pago exitoso
+      await clearCart();
+
       setPaymentSuccess(true);
       toast.success('¡Pago procesado exitosamente!');
     } catch (error) {
@@ -160,7 +169,7 @@ const PagarPlanesPage = () => {
                   {selectedPlan.items.map(item => <ListGroup.Item key={item} className="px-0 border-0">{item}</ListGroup.Item>)}
                   {selectedPlan.selectedFruits && selectedPlan.selectedFruits.length > 0 && (
                     <ListGroup.Item className="px-0 border-0">
-                      <strong className="text-success">Frutas elegidas:</strong> {selectedPlan.selectedFruits.map(f => f.charAt(0).toUpperCase() + f.slice(1)).join(', ')}
+                      <strong className="text-success">Frutas elegidas:</strong> {selectedPlan.selectedFruits.join(', ')}
                     </ListGroup.Item>
                   )}
                 </ListGroup>
@@ -187,12 +196,16 @@ const PagarPlanesPage = () => {
                       id="cardNumber"
                       name="cardNumber"
                       type="text"
-                      placeholder="1234 1234 1234 1234"
+                      placeholder="4111111111111111"
                       value={cardNumber}
                       onChange={handleCardNumberChange}
                       required
                       disabled={isProcessing}
+                      maxLength={19}
                     />
+                    <Form.Text className="text-muted">
+                      Ingresa entre 13 y 19 dígitos sin espacios
+                    </Form.Text>
                   </Form.Group>
                   <Button
                     type="submit"

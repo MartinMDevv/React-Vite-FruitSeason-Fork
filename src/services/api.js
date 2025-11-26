@@ -11,13 +11,24 @@ const handleResponse = async (response) => {
     if (!response.ok) {
         let error;
         try {
-            error = await response.json();
+            const contentType = response.headers.get('content-type');
+            if (contentType && contentType.includes('application/json')) {
+                error = await response.json();
+            } else {
+                error = { message: response.statusText || 'Error de conexión con el servidor' };
+            }
         } catch (e) {
-            // Si no es JSON, probablemente sea un error de red o 500 html
             error = { message: 'Error de conexión con el servidor' };
         }
         throw new Error(error.message || `Error: ${response.status}`);
     }
+
+    // Algunos endpoints pueden retornar 204 No Content
+    const contentType = response.headers.get('content-type');
+    if (response.status === 204 || !contentType || !contentType.includes('application/json')) {
+        return null;
+    }
+
     return response.json();
 };
 
@@ -46,10 +57,35 @@ const api = {
     // Cart endpoints
     cart: {
         get: async () => {
-            const response = await fetch(`${API_BASE_URL}/cart`, {
-                headers: getAuthHeader()
-            });
-            return handleResponse(response);
+            try {
+                const response = await fetch(`${API_BASE_URL}/cart`, {
+                    headers: getAuthHeader()
+                });
+
+                // Si el carrito no existe (404) o hay error, retornar carrito vacío
+                if (!response.ok) {
+                    console.warn('Carrito no encontrado o error, retornando carrito vacío');
+                    return {
+                        selectedPlan: null,
+                        selectedFruits: [],
+                        isComplete: false,
+                        selectedFruitsCount: 0,
+                        requiredFruits: 0
+                    };
+                }
+
+                return handleResponse(response);
+            } catch (error) {
+                console.error('Error al obtener el carrito:', error);
+                // Retornar carrito vacío en caso de error
+                return {
+                    selectedPlan: null,
+                    selectedFruits: [],
+                    isComplete: false,
+                    selectedFruitsCount: 0,
+                    requiredFruits: 0
+                };
+            }
         },
 
         selectPlan: async (plan) => {
@@ -122,6 +158,35 @@ const api = {
             const response = await fetch(`${API_BASE_URL}/orders`, {
                 headers: getAuthHeader()
             });
+            return handleResponse(response);
+        }
+    },
+
+    // Comments endpoints
+    comments: {
+        create: async (commentData) => {
+            try {
+                const response = await fetch(`${API_BASE_URL}/comments`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(commentData)
+                });
+                return handleResponse(response);
+            } catch (error) {
+                console.error('Error en comments.create:', error);
+                throw error;
+            }
+        },
+
+        getAll: async () => {
+            const response = await fetch(`${API_BASE_URL}/comments`);
+            return handleResponse(response);
+        },
+
+        getRecent: async (limit = 10) => {
+            const response = await fetch(`${API_BASE_URL}/comments/recent?limit=${limit}`);
             return handleResponse(response);
         }
     }
