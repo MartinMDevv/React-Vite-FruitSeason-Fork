@@ -9,7 +9,13 @@ const getAuthHeader = () => {
 // Helper function to handle API responses
 const handleResponse = async (response) => {
     if (!response.ok) {
-        const error = await response.json().catch(() => ({ message: 'Error desconocido' }));
+        let error;
+        try {
+            error = await response.json();
+        } catch (e) {
+            // Si no es JSON, probablemente sea un error de red o 500 html
+            error = { message: 'Error de conexión con el servidor' };
+        }
         throw new Error(error.message || `Error: ${response.status}`);
     }
     return response.json();

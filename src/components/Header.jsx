@@ -85,7 +85,7 @@ export default function Header() {
                 {user ? (
                   <div className="dropdown">
                     <button className="btn btn-light btn-sm rounded-pill px-3 dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                      Hola, {user}
+                      Hola, {user.username}
                     </button>
                     <ul className="dropdown-menu dropdown-menu-end">
                       <li><button className="dropdown-item" onClick={logout}>Cerrar Sesión</button></li>

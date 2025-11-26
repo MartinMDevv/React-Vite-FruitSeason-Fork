@@ -56,48 +56,26 @@ const Subscriptions = ({ showFruitSelector = false }) => {
     }
   }, [cart]);
 
-  const handleFruitToggle = async (planId, fruitName) => {
-    if (!isAuthenticated) {
-      toast.info('Inicia sesión para personalizar tu suscripción');
-      navigate('/login');
-      return;
-    }
-
+  const handleFruitToggle = (planId, fruitName) => {
     const currentSelection = localSelections[planId];
     const max = subscriptionPlans.find(p => p.id === planId).maxFruits;
 
-    setIsLoading(true);
-
-    try {
-      if (currentSelection.includes(fruitName)) {
-        // Remover fruta
-        const result = await removeFruit(fruitName);
-        if (result.success) {
-          setLocalSelections(prev => ({
-            ...prev,
-            [planId]: prev[planId].filter(name => name !== fruitName)
-          }));
-        } else {
-          toast.error(result.error);
-        }
+    if (currentSelection.includes(fruitName)) {
+      // Remove locally
+      setLocalSelections(prev => ({
+        ...prev,
+        [planId]: prev[planId].filter(name => name !== fruitName)
+      }));
+    } else {
+      // Add locally if limit not reached
+      if (currentSelection.length < max) {
+        setLocalSelections(prev => ({
+          ...prev,
+          [planId]: [...prev[planId], fruitName]
+        }));
       } else {
-        // Agregar fruta
-        if (currentSelection.length < max) {
-          const result = await addFruit(fruitName);
-          if (result.success) {
-            setLocalSelections(prev => ({
-              ...prev,
-              [planId]: [...prev[planId], fruitName]
-            }));
-          } else {
-            toast.error(result.error);
-          }
-        }
+        toast.warning(`Máximo ${max} frutas para este plan`);
       }
-    } catch (error) {
-      toast.error('Error al actualizar las frutas');
-    } finally {
-      setIsLoading(false);
     }
   };
 
@@ -108,7 +86,6 @@ const Subscriptions = ({ showFruitSelector = false }) => {
       return;
     }
 
-    // Si on home page (no selector), redirect to subscriptions page
     if (!showFruitSelector) {
       toast.info('Por favor, personaliza tu caja seleccionando tus frutas.');
       navigate('/suscripciones');
@@ -117,7 +94,6 @@ const Subscriptions = ({ showFruitSelector = false }) => {
 
     const currentSelection = localSelections[plan.id];
 
-    // Enforce full selection
     if (currentSelection.length < plan.maxFruits) {
       toast.warning(`Debes seleccionar ${plan.maxFruits} frutas para el ${plan.title}.`);
       return;
@@ -126,17 +102,31 @@ const Subscriptions = ({ showFruitSelector = false }) => {
     setIsLoading(true);
 
     try {
-      // Seleccionar plan en el backend
+      // 1. Select Plan (clears previous cart)
       const backendPlan = planToBackend(plan.id);
-      const result = await selectPlan(backendPlan);
+      const planResult = await selectPlan(backendPlan);
 
-      if (result.success) {
-        toast.success(`¡${plan.title} listo para el pago!`);
-      } else {
-        toast.error(result.error || 'Error al seleccionar el plan');
+      if (!planResult.success) {
+        throw new Error(planResult.error || 'Error al seleccionar el plan');
       }
+
+      // 2. Add all selected fruits
+      // We use a loop to add them one by one (or could be batch if API supported it)
+      for (const fruitName of currentSelection) {
+        const fruitResult = await addFruit(fruitName);
+        if (!fruitResult.success) {
+          // If one fails, we should probably stop or warn
+          console.error(`Error adding ${fruitName}:`, fruitResult.error);
+        }
+      }
+
+      // 3. Refresh cart and notify
+      await fetchCart();
+      toast.success(`¡${plan.title} listo para el pago!`);
+      navigate(`/PagarPlanes?plan=${plan.id}`);
+
     } catch (error) {
-      toast.error('Error al agregar el plan al carrito');
+      toast.error(error.message || 'Error al procesar la suscripción');
     } finally {
       setIsLoading(false);
     }
