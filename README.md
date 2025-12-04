@@ -421,7 +421,7 @@ spring.datasource.password=${RDS_PASSWORD}
 
 Proyecto desarrollado como parte del curso de Desarrollo Fullstack 2.
 
-**Repositorio Backend**: [FoodHub Backend](enlace-al-backend)
+**Repositorio Backend**: [Fruit Season Backend](https://github.com/MartinMDevv/FruitSeason_Backend)
 
 ## 📚 Aprendizajes del Proyecto
 
